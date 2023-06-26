@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import com.evans.models.Vacancy;
 
-public interface IVacantService {
+public interface IVacancyService {
 
 	public List<Vacancy> getAll();
 

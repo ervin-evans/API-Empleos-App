@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.evans.models.Vacancy;
 
 @Repository
-public interface IVacantRepository extends JpaRepository<Vacancy, Long> {
+public interface IVacancyRepository extends JpaRepository<Vacancy, Long> {
 
 }
