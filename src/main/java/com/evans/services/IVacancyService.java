@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.evans.models.Vacancy;
+import com.evans.requests.responses.RequestVacancy;
 
 public interface IVacancyService {
 
@@ -11,7 +12,7 @@ public interface IVacancyService {
 
 	public Optional<Vacancy> getById(Long id);
 
-	public Vacancy save(Vacancy vacant);
+	public Vacancy save(Vacancy vacancy);
 
 	public Vacancy delete(Long id);
 

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.evans.models.Vacancy;
 import com.evans.repository.IVacancyRepository;
+import com.evans.requests.responses.RequestVacancy;
 import com.evans.services.IVacancyService;
 
 @Service
@@ -27,16 +28,16 @@ public class VacancyServicesImpl implements IVacancyService {
 	}
 
 	@Override
-	public Vacancy save(Vacancy vacant) {
-		return iVacancyRepository.save(vacant);
+	public Vacancy save(Vacancy vacancy) {
+		return iVacancyRepository.save(vacancy);
 	}
 
 	@Override
 	public Vacancy delete(Long id) {
-		Optional<Vacancy> vacant = iVacancyRepository.findById(id);
-		if (vacant.isPresent()) {
-			iVacancyRepository.delete(vacant.get());
-			return vacant.get();
+		Optional<Vacancy> vacancy = iVacancyRepository.findById(id);
+		if (vacancy.isPresent()) {
+			iVacancyRepository.delete(vacancy.get());
+			return vacancy.get();
 		}
 		return null;
 	}
