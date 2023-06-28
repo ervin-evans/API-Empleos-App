@@ -1,5 +1,6 @@
 package com.evans.controllers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,8 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,11 +26,13 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 
 @RestController
-@RequestMapping("/api/v1/vacancies")
+@RequestMapping("/api/v1/vacancy")
 public class VacanciesController {
 
 	@Autowired
 	private IVacancyService iVacancyService;
+
+	private Vacancy vacancy;
 
 	@GetMapping("/get-all")
 	public ResponseEntity<Map<String, Object>> getAllVacants() {
@@ -60,5 +65,32 @@ public class VacanciesController {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+	}
+
+	@PostMapping("/add")
+	public ResponseEntity<Map<String, Object>> addVacancy(@Valid @RequestBody Vacancy request,
+			BindingResult result) {
+		Map<String, Object> response = new HashMap<>();
+		// Validamos los campos del formulario
+		if (result.hasErrors()) {
+			System.out.println("Hay errores en la validacion");
+			ArrayList<String> errors = new ArrayList<>();
+			result.getFieldErrors().forEach(e -> {
+				errors.add(e.getDefaultMessage());
+			});
+			response.put("errors", errors);
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+		}
+
+		try {
+			vacancy = iVacancyService.save(request);
+			response.put("message", "La vacante de " + vacancy.getName() + " ha sido guardado!");
+			response.put("vacancy", vacancy);
+
+		} catch (DataAccessException e) {
+			response.put("errors", "Hubo errores al guardar la vacante porque " + e.getRootCause().getMessage());
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
 }

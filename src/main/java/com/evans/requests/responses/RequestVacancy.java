@@ -1,18 +1,22 @@
 package com.evans.requests.responses;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.util.Date;
+
+import com.evans.models.Status;
 
 public class RequestVacancy {
 
 	private Long id;
 	private String name;
-	private String status;
-	private String descripcion;
+	private Status status;
+	private String description;
 	private BigDecimal salary;
-	private LocalDate publicationDate;
+	private Date publicationDate;
 	private String image;
 	private String details;
+
+
 
 	public String getName() {
 		return name;
@@ -22,20 +26,20 @@ public class RequestVacancy {
 		this.name = name;
 	}
 
-	public String getStatus() {
+	public Status getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(Status status) {
 		this.status = status;
 	}
 
-	public String getDescripcion() {
-		return descripcion;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
+	public void setDescription(String descripcion) {
+		this.description = descripcion;
 	}
 
 	public BigDecimal getSalary() {
@@ -46,11 +50,11 @@ public class RequestVacancy {
 		this.salary = salary;
 	}
 
-	public LocalDate getPublicationDate() {
+	public Date getPublicationDate() {
 		return publicationDate;
 	}
 
-	public void setPublicationDate(LocalDate publicationDate) {
+	public void setPublicationDate(Date publicationDate) {
 		this.publicationDate = publicationDate;
 	}
 
@@ -80,8 +84,8 @@ public class RequestVacancy {
 
 	@Override
 	public String toString() {
-		return "RequestVacancy [id=" + id + ", name=" + name + ", status=" + status + ", descripcion=" + descripcion
-				+ ", salary=" + salary + ", publicationDate=" + publicationDate + ", image=" + image + ", details="
+		return "RequestVacancy [id=" + id + ", name=" + name + ", status=" + status + ", description=" + description
+				+ ", salary=" + salary + ", publication_date=" + publicationDate + ", image=" + image + ", details="
 				+ details + "]";
 	}
 
