@@ -11,6 +11,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -124,5 +125,26 @@ public class VacanciesController {
 
 		}
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Map<String, Object>> deleteVacancy(@PathVariable("id") Long id) {
+		Map<String, Object> response = new HashMap<>();
+		vacancy = iVacancyService.delete(id);
+		try {
+			if (vacancy != null) {
+				response.put("msg", "La vacante " + vacancy.getName() + " se ha eliminado satisfactoriamente");
+				response.put("vacancy", vacancy);
+				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+			} else {
+				response.put("errors", "No se encontro la vacante con el id proporcionado");
+				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+			}
+		} catch (DataAccessException e) {
+			response.put("errors",
+					"Hubo errores al eliminar la vacante porque " + e.getMostSpecificCause().getMessage());
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
 	}
 }
