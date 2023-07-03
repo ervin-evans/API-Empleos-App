@@ -14,12 +14,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.evans.models.Vacancy;
-import com.evans.requests.responses.RequestVacancy;
 import com.evans.services.IVacancyService;
 
 import jakarta.validation.Valid;
@@ -68,13 +68,11 @@ public class VacanciesController {
 	}
 
 	@PostMapping("/add")
-	public ResponseEntity<Map<String, Object>> addVacancy(@Valid @RequestBody Vacancy request,
-			BindingResult result) {
+	public ResponseEntity<Map<String, Object>> addVacancy(@Valid @RequestBody Vacancy request, BindingResult result) {
 		Map<String, Object> response = new HashMap<>();
 		// Validamos los campos del formulario
 		if (result.hasErrors()) {
-			System.out.println("Hay errores en la validacion");
-			ArrayList<String> errors = new ArrayList<>();
+			List<String> errors = new ArrayList<String>();
 			result.getFieldErrors().forEach(e -> {
 				errors.add(e.getDefaultMessage());
 			});
@@ -90,6 +88,40 @@ public class VacanciesController {
 		} catch (DataAccessException e) {
 			response.put("errors", "Hubo errores al guardar la vacante porque " + e.getRootCause().getMessage());
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+	}
+
+	@PutMapping("/update/{id}")
+	public ResponseEntity<Map<String, Object>> updateVacancy(@Valid @RequestBody Vacancy request, BindingResult result,
+			@PathVariable("id") Long id) {
+		Map<String, Object> response = new HashMap<>();
+		// Verificamos los errores de validacion
+		if (result.hasErrors()) {
+			List<String> errors = new ArrayList<String>();
+			result.getFieldErrors().forEach(e -> {
+				errors.add(e.getDefaultMessage());
+			});
+
+			response.put("errors", errors);
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+		}
+		// En caso de no haber erroes procedemos a guardar al vacante
+
+		try {
+			Optional<Vacancy> vacancyOptional = iVacancyService.getById(id);
+			if (!vacancyOptional.isPresent()) {
+				response.put("errors", "No fue encontrada la vacante con el id proporcionado");
+				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+			}
+			vacancy = iVacancyService.save(request);
+			response.put("message", "La vacante " + vacancy.getName() + " fue guardada existosamente!");
+			response.put("vacancy", vacancy);
+
+		} catch (DataAccessException e) {
+			response.put("errors", "Hubo errores al actualizar la vacante porque " + e.getRootCause().getMessage());
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+
 		}
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}

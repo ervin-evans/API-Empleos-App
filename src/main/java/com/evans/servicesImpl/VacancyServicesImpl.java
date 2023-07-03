@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.evans.models.Vacancy;
 import com.evans.repository.IVacancyRepository;
-import com.evans.requests.responses.RequestVacancy;
 import com.evans.services.IVacancyService;
 
 @Service

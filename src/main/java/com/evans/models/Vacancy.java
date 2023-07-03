@@ -33,9 +33,7 @@ public class Vacancy {
 
 	@Column(name = "description", nullable = false, length = 200)
 	@NotBlank(message = "La descripcion es obligatoria")
-	//@Min(value = 10, message = "La cantidad minima de caracteres permitida es 10")
-	//@Max(value = 255, message = "La cantidad maxima de caracteres permitida es 255")
-	@Size(min = 10, max = 255, message = "Caracteres: Min: 10, Max: 255")
+	@Size(min = 10, max = 255, message = "Caracteres: Min: 10, Max: 255 para la descripcion")
 	private String description;
 
 	@Column(name = "status", nullable = false, length = 20)
@@ -44,8 +42,8 @@ public class Vacancy {
 	private Status status;
 
 	@Column(name = "publication_date", nullable = false)
-	@NotNull(message = "La fecha no puede ser null")
-	@DateTimeFormat(pattern = "dd-MM-yyyy")
+	@NotNull(message = "La fecha debe tener formato correcto [dia-mes-anio]")
+	@DateTimeFormat(pattern = "dia-mes-anio")
 	private Date publicationDate;
 
 	@Column(name = "salary", nullable = false, precision = 15, scale = 2)
@@ -59,8 +57,6 @@ public class Vacancy {
 
 	@Column(name = "details", nullable = false, length = 1000)
 	@NotBlank(message = "Los detalles son obligatorios")
-	//@Min(value = 50, message = "La cantidad minima de caracteres es 50")
-	//@Max(value = 1000, message = "La cantidad maxima de caracteres es 1000")
 	private String details;
 
 	public String getName() {

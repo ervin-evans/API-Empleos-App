@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import com.evans.models.Vacancy;
-import com.evans.requests.responses.RequestVacancy;
 
 public interface IVacancyService {
 
